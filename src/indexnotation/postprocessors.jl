@@ -70,14 +70,14 @@ end
     insertbackend(ex, backend, operations)
 
 Insert a backend into a tensor operation, e.g. for any `op` ∈ `operations`, transform
-`TensorOperations.op(args...)` -> `TensorOperations.op(args..., Backend{:backend}())`
+`TensorOperations.op(args...)` -> `TensorOperations.op(args..., backend)`
 """
 function insertbackend(ex, backend, operations)
     if isexpr(ex, :call) && ex.args[1] isa GlobalRef &&
        ex.args[1].mod == TensorOperations &&
        ex.args[1].name ∈ operations
-        b = Backend{backend}()
-        return Expr(:call, ex.args..., b)
+        # b = Backend{backend}()
+        return Expr(:call, ex.args..., backend)
     elseif isa(ex, Expr)
         return Expr(ex.head, (insertbackend(e, backend, operations) for e in ex.args)...)
     else
