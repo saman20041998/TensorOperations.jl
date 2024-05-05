@@ -11,30 +11,14 @@ end
 
 # TODO
 # add check for stridedness of abstract arrays and add a pure implementation as fallback
-
-const StridedNative = Backend{:StridedNative}
-const StridedBLAS = Backend{:StridedBLAS}
-
-function tensoradd!(C::AbstractArray, pC::Index2Tuple,
-                    A::AbstractArray, conjA::Symbol,
-                    α::Number, β::Number)
-    return tensoradd!(C, pC, A, conjA, α, β, StridedNative())
-end
-
-function tensortrace!(C::AbstractArray, pC::Index2Tuple,
-                      A::AbstractArray, pA::Index2Tuple, conjA::Symbol,
-                      α, β)
-    return tensortrace!(C, pC, A, pA, conjA, α, β, StridedNative())
-end
-
-function tensorcontract!(C::AbstractArray, pC::Index2Tuple,
-                         A::AbstractArray, pA::Index2Tuple, conjA::Symbol,
-                         B::AbstractArray, pB::Index2Tuple, conjB::Symbol,
-                         α::Number, β::Number)
+select_backend(::typeof(tensoradd!), C::AbstractArray, A::AbstractArray) = StridedNative()
+select_backend(::typeof(tensortrace!), C::AbstractArray, A::AbstractArray) = StridedNative()
+function select_backend(::typeof(tensorcontract!), C::AbstractArray, A::AbstractArray,
+                        B::AbstractArray)
     if eltype(C) <: LinearAlgebra.BlasFloat && !isa(B, Diagonal) && !isa(A, Diagonal)
-        return tensorcontract!(C, pC, A, pA, conjA, B, pB, conjB, α, β, StridedBLAS())
+        return StridedBLAS()
     else
-        return tensorcontract!(C, pC, A, pA, conjA, B, pB, conjB, α, β, StridedNative())
+        return StridedNative()
     end
 end
 
