@@ -78,13 +78,7 @@ function tensorparser(tensorexpr, kwargs...)
             end
             parser.contractiontreebuilder = network -> optimaltree(network, optdict)[1]
         elseif name == :backend
-            val isa Symbol ||
-                throw(ArgumentError("Backend should be a symbol."))
-            push!(parser.postprocessors, ex -> insert_operationbackend(ex, val))
-        elseif name == :allocator
-            val isa Symbol ||
-                throw(ArgumentError("Allocator should be a symbol."))
-            push!(parser.postprocessors, ex -> insert_allocatorbackend(ex, val))
+            push!(parser.postprocessors, ex -> insertbackend(ex, val))
         else
             throw(ArgumentError("Unknown keyword argument `name`."))
         end
