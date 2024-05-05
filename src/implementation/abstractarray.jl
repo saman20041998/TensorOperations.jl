@@ -28,14 +28,14 @@ end
 
 function tensoradd!(C::AbstractArray, pC::Index2Tuple,
                     A::AbstractArray, conjA::Symbol,
-                    α::Number, β::Number, backend::StridedBackends)
+                    α::Number, β::Number, backend::StridedBackend)
     tensoradd!(StridedView(C), pC, StridedView(A), conjA, α, β, backend)
     return C
 end
 
 function tensortrace!(C::AbstractArray, pC::Index2Tuple,
                       A::AbstractArray, pA::Index2Tuple, conjA::Symbol,
-                      α::Number, β::Number, backend::StridedBackends)
+                      α::Number, β::Number, backend::StridedBackend)
     tensortrace!(StridedView(C), pC, StridedView(A), pA, conjA, α, β, backend)
     return C
 end

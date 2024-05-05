@@ -34,4 +34,4 @@ the tensor operations as BLAS operations.
 """
 struct StridedBLAS <: AbstractBackend end
 
-const StridedBackends = Union{StridedNative,StridedBLAS}
+const StridedBackend = Union{StridedNative,StridedBLAS}
