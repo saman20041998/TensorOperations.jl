@@ -141,6 +141,11 @@ strategy might be used.
 See also [`tensoralloc_add`](@ref), [`tensoralloc_contract`](@ref) and [`tensorfree!`](@ref).
 """
 function tensoralloc end
+# insert default backend
+function tensoralloc(ttype, structure, istemp)
+    return tensoralloc(ttype, structure, istemp,
+                       select_backend(tensoralloc, ttype, structure, istemp))
+end
 
 """
     tensorfree!(C, [backend::AbstractBackend])
@@ -149,7 +154,9 @@ Provide a hint that the allocated memory of `C` can be released.
 
 See also [`tensoralloc`](@ref).
 """
-tensorfree!(C) = nothing
+function tensorfree!(C)
+    return tensorfree!(C, select_backend(tensorfree!, C))
+end
 
 #-------------------------------------------------------------------------------------------
 # Utility
