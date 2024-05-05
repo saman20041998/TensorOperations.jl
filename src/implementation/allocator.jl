@@ -92,3 +92,5 @@ function tensoralloc(ttype, structure, istemp=false, backend::AbstractBackend...
     end
     return C
 end
+
+tensorfree!(C, backend::AbstractBackend...) = nothing
