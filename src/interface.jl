@@ -19,6 +19,10 @@ function tensoradd! end
 function tensoradd!(C, pC::Index2Tuple, A, conjA::Symbol)
     return tensoradd!(C, pC, A, conjA, One(), One())
 end
+# insert default backend
+function tensoradd!(C, pC::Index2Tuple, A, conjA::Symbol, α::Number, β::Number)
+    return tensoradd!(C, pC, A, conjA, α, β, select_backend(tensoradd!, C, A))
+end
 
 """
     tensortrace!(C, pC, A, pA, conjA, α=1, β=0 [, backend])
@@ -38,6 +42,10 @@ function tensortrace! end
 # insert default α and β arguments
 function tensortrace!(C, pC::Index2Tuple, A, pA::Index2Tuple, conjA::Symbol)
     return tensortrace!(C, pC, A, pA, conjA, One(), Zero())
+end
+# insert default backend
+function tensortrace!(C, pC::Index2Tuple, A, pA::Index2Tuple, conjA::Symbol, α::Number, β::Number)
+    return tensortrace!(C, pC, A, pA, conjA, α, β, select_backend(tensortrace!, C, A))
 end
 
 """
@@ -61,6 +69,13 @@ function tensorcontract!(C, pC::Index2Tuple,
                          A, pA::Index2Tuple, conjA::Symbol,
                          B, pB::Index2Tuple, conjB::Symbol)
     return tensorcontract!(C, pC, A, pA, conjA, B, pB, conjB, One(), Zero())
+end
+# insert default backend
+function tensorcontract!(C, pC::Index2Tuple,
+                         A, pA::Index2Tuple, conjA::Symbol,
+                         B, pB::Index2Tuple, conjB::Symbol,
+                         α::Number, β::Number)
+    return tensorcontract!(C, pC, A, pA, conjA, B, pB, conjB, α, β, select_backend(tensorcontract!, C, A, B))
 end
 
 """
