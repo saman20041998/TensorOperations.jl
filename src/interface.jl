@@ -131,7 +131,7 @@ Obtain `typeof(C)`, where `C` is the result of
 function tensorcontract_type end
 
 """
-    tensoralloc(ttype, structure, istemp=false, [backend::Backend])
+    tensoralloc(ttype, structure, istemp=false, [backend::AbstractBackend])
 
 Allocate memory for a tensor of type `ttype` and structure `structure`. The optional third
 argument can be used to indicate that the result is used as a temporary tensor, for which
@@ -143,7 +143,7 @@ See also [`tensoralloc_add`](@ref), [`tensoralloc_contract`](@ref) and [`tensorf
 function tensoralloc end
 
 """
-    tensorfree!(C, [backend::Backend])
+    tensorfree!(C, [backend::AbstractBackend])
 
 Provide a hint that the allocated memory of `C` can be released.
 

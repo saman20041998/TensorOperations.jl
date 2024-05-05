@@ -18,7 +18,7 @@ Promote the scalar types of a tensor addition to a common type.
 promote_add(args...) = Base.promote_op(+, args...)
 
 """
-    tensoralloc_add(TC, pC, A, conjA, istemp=false, backend::Backend...)
+    tensoralloc_add(TC, pC, A, conjA, istemp=false, backend::AbstractBackend...)
 
 Allocate a tensor `C` of scalar type `TC` that would be the result of
 
@@ -30,14 +30,14 @@ used to implement different allocation strategies.
 
 See also [`tensoralloc`](@ref) and [`tensorfree!`](@ref).
 """
-function tensoralloc_add(TC, pC, A, conjA, istemp=false, backend::Backend...)
+function tensoralloc_add(TC, pC, A, conjA, istemp=false, backend::AbstractBackend...)
     ttype = tensoradd_type(TC, pC, A, conjA)
     structure = tensoradd_structure(pC, A, conjA)
     return tensoralloc(ttype, structure, istemp, backend...)::ttype
 end
 
 """
-    tensoralloc_contract(TC, pC, A, pA, conjA, B, pB, conjB, istemp=false, backend::Backend...)
+    tensoralloc_contract(TC, pC, A, pA, conjA, B, pB, conjB, istemp=false, backend::AbstractBackend...)
 
 Allocate a tensor `C` of scalar type `TC` that would be the result of
 
@@ -50,7 +50,7 @@ used to implement different allocation strategies.
 See also [`tensoralloc`](@ref) and [`tensorfree!`](@ref).
 """
 function tensoralloc_contract(TC, pC, A, pA, conjA, B, pB, conjB,
-                              istemp=false, backend::Backend...)
+                              istemp=false, backend::AbstractBackend...)
     ttype = tensorcontract_type(TC, pC, A, pA, conjA, B, pB, conjB)
     structure = tensorcontract_structure(pC, A, pA, conjA, B, pB, conjB)
     return tensoralloc(ttype, structure, istemp, backend...)::ttype
@@ -84,7 +84,7 @@ function tensorcontract_structure(pC::Index2Tuple,
     end
 end
 
-function tensoralloc(ttype, structure, istemp=false, backend::Backend...)
+function tensoralloc(ttype, structure, istemp=false, backend::AbstractBackend...)
     C = ttype(undef, structure)
     # fix an issue with undefined references for strided arrays
     if !isbitstype(scalartype(ttype))
